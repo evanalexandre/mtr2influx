@@ -1,11 +1,7 @@
-import sys, json
+import sys, json, config
 import datetime as dt
 from influxdb import InfluxDBClient, SeriesHelper
 
-
-host = 'localhost'
-db = 'mtr'
-port = 8086
 
 class HubEntry(SeriesHelper):
     class Meta:
@@ -15,10 +11,9 @@ class HubEntry(SeriesHelper):
 
 
 def main():
-    db_client = InfluxDBClient(host=host, port=port, database=db)
-    db_client.create_database(db)
+    db_client = InfluxDBClient(host=config.host, port=config.port, database=config.db)
+    db_client.create_database(config.db)
     HubEntry.Meta.client = db_client
-
     mtr_result = json.load(sys.stdin)
     destination = mtr_result['report']['mtr']['dst']
     report_time = dt.datetime.utcnow()
