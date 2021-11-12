@@ -11,7 +11,13 @@ class HubEntry(SeriesHelper):
 
 
 def main():
-    db_client = InfluxDBClient(host=config.host, port=config.port, database=config.db)
+    db_client = InfluxDBClient(
+        host=config.host,
+        port=config.port,
+        database=config.db,
+        username=config.username,
+        password=config.password
+    )
     db_client.create_database(config.db)
     HubEntry.Meta.client = db_client
     mtr_result = json.load(sys.stdin)
